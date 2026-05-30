@@ -17,11 +17,13 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Config Mail
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'sandbox.smtp.mailtrap.io')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 2525))
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'samyoudachene@gmail.com'
-app.config['MAIL_PASSWORD'] = 'hhhhhhh7'
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = os.environ.get('34b7376e339e58')
+app.config['MAIL_PASSWORD'] = os.environ.get('2a0898789e55ba')
+app.config['MAIL_DEFAULT_SENDER'] = 'noreply@tizifit.com'
 
 db = SQLAlchemy(app)
 mail = Mail(app)
