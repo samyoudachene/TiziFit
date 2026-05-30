@@ -16,19 +16,21 @@ UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Config Mail
+# Config Mail CORRIGÉE
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
 app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = os.environ.get('samyoudachene@gmail.com')
+# On cherche le nom de la variable 'MAIL_USERNAME' définie sur Render
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+# On cherche le nom de la variable 'MAIL_PASSWORD' définie sur Render
 app.config['MAIL_PASSWORD'] = os.environ.get('rhgurvfrfdntncag')
-app.config['MAIL_DEFAULT_SENDER'] = 'noreply@tizifit.com'
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('samyoudachene@gmail.com')
 
 db = SQLAlchemy(app)
 mail = Mail(app)
 
-# Modèle de la Base de Données mis à jour
+# Modèle de la Base de Données (Nettoyé des doublons)
 class UserTracker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(100))
@@ -46,12 +48,10 @@ class UserTracker(db.Model):
     calories_consommees = db.Column(db.Integer, default=0)
     objectif_calories = db.Column(db.Integer, default=2500)
     
-    # --- NOUVELLE COLONNE : LE PROGRAMME DU COACH ---
+    # NOUVELLE COLONNE : LE PROGRAMME DU COACH
     programme_coach = db.Column(db.Text, default="Ton coach Samy analyse actuellement tes données. Ton programme sur-mesure apparaîtra ici très bientôt !")
-    objectif_calories = db.Column(db.Integer, default=2500)
-    programme_coach = db.Column(db.Text, default="Ton programme sur-mesure apparaîtra ici très bientôt !")
 
-    # --- NOUVELLE COLONNE POUR LE GRAPHIQUE ---
+    # NOUVELLE COLONNE POUR LE GRAPHIQUE
     historique_poids = db.Column(db.Text)
     
 with app.app_context():
@@ -61,17 +61,13 @@ with app.app_context():
 # --- GESTION DES LANGUES ---
 @app.context_processor
 def inject_translations():
-    # On récupère la langue choisie (par défaut 'fr')
     lang = session.get('lang', 'fr')
-    # On envoie le bon dictionnaire 't' et la langue actuelle 'current_lang' aux pages HTML
     return dict(t=TRANSLATIONS.get(lang, TRANSLATIONS['fr']), current_lang=lang)
 
 @app.route('/set_lang/<lang>')
 def set_lang(lang):
-    # Si l'utilisateur clique sur un bouton de langue, on l'enregistre en session
     if lang in TRANSLATIONS:
         session['lang'] = lang
-    # On le renvoie sur la page où il était
     return redirect(request.referrer or url_for('home'))
     
 
@@ -88,19 +84,20 @@ def coaching():
         if 'user_id' in session:
             user = UserTracker.query.get(session['user_id'])
             
-            # 🔴 NOUVEAUTÉ : On enregistre le pack choisi dans la base de données
+            # On enregistre le pack choisi dans la base de données
             user.pack_actuel = pack_name
             db.session.commit()
             
             # Envoi du mail au coach...
             msg = Message(f"Choix de Formule : {pack_name}",
-                          sender='ton_vrai_email@gmail.com',
+                          sender=app.config['MAIL_DEFAULT_SENDER'],
                           recipients=['samyoudachene@gmail.com'])
             msg.body = f"Le client connecté {user.nom} a validé la formule : {pack_name}."
             try:
                 mail.send(msg)
                 flash(f"Félicitations ! Votre abonnement au {pack_name} est activé.", "success")
-            except Exception:
+            except Exception as e:
+                print(f"Erreur d'envoi d'email: {e}") # Pour voir l'erreur dans les logs Render
                 flash("Votre pack est activé sur votre espace.", "success")
             
             return redirect(url_for('track'))
@@ -132,7 +129,6 @@ def maj_poids():
 
         if nouveau_poids:
             user.poids = nouveau_poids
-            # On ajoute le nouveau poids à l'historique avec une virgule
             if user.historique_poids:
                 user.historique_poids += f",{nouveau_poids}"
             else:
@@ -144,7 +140,7 @@ def maj_poids():
     return redirect(url_for('track'))
 
 
-# MISE À JOUR DE L'INSCRIPTION (Pour inclure le pack s'il vient de la page coaching)
+# MISE À JOUR DE L'INSCRIPTION
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():
     if request.method == 'POST':
@@ -157,7 +153,7 @@ def inscription():
         taille = request.form.get('taille')
         age = request.form.get('age')
         description = request.form.get('description')
-        pack_recupere = request.form.get('pack_hidden', 'Non spécifié') # Récupère le pack caché
+        pack_recupere = request.form.get('pack_hidden', 'Non spécifié')
 
         hashed_password = generate_password_hash(password)
 
@@ -183,15 +179,15 @@ def inscription():
         # Connexion automatique
         session['user_id'] = nouvel_utilisateur.id
 
-        # Envoi du mail au Coach incluant la formule choisie !
+        # Envoi du mail au Coach
         msg = Message(f"Nouveau Client Inscrit - Pack : {pack_recupere}",
-                      sender='ton_email_qui_envoie@gmail.com',
+                      sender=app.config['MAIL_DEFAULT_SENDER'],
                       recipients=['samyoudachene@gmail.com'])
         msg.body = f"Nouveau client: {nom}\nPack choisi: {pack_recupere}\nPoids: {poids}kg\nObjectif: {description}"
         try:
             mail.send(msg)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Erreur d'envoi d'email: {e}") # Pour voir l'erreur dans les logs Render
 
         flash(f"Inscription réussie ! Bienvenue dans votre espace et merci d'avoir choisi le {pack_recupere}.", "success")
         return redirect(url_for('track'))
@@ -209,7 +205,7 @@ def login():
         
         # Vérification de l'email et du mot de passe
         if user and check_password_hash(user.mot_de_passe, password):
-            session['user_id'] = user.id # Création de la session
+            session['user_id'] = user.id 
             flash("Connexion réussie !", "success")
             return redirect(url_for('track'))
         else:
@@ -220,17 +216,14 @@ def login():
 # -- L'ESPACE PERSONNEL (TRACK) --
 @app.route('/track')
 def track():
-    # 1. Vérifier si l'utilisateur est bien connecté en session
     if 'user_id' not in session:
         flash("Veuillez vous connecter pour accéder à votre espace.", "warning")
-        return redirect(url_for('login')) # Ou ta route de connexion
+        return redirect(url_for('login'))
     
-    # 2. Récupérer l'utilisateur
     user = UserTracker.query.get(session['user_id'])
     
-    # 3. Sécurité supplémentaire : si l'ID en session n'existe pas en DB
     if user is None:
-        session.pop('user_id', None) # Nettoyer la session
+        session.pop('user_id', None)
         return redirect(url_for('login'))
         
     return render_template('track.html', user=user)
