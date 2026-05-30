@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="text-align: center; padding: 60px 20px; background: rgba(30,30,30,0.4); border-radius: 12px; margin-bottom: 40px; border: 1px solid #2f3542;">
+    <h1 style="font-size: 42px; font-weight: 900; text-transform: uppercase; color: #ff4757; margin-bottom: 10px;">
+        {{ t['coach_hero_title'] }}
+    </h1>
+    <p style="font-size: 18px; color: #a4b0be; max-width: 600px; margin: 0 auto;">
+        {{ t['coach_hero_desc'] }}
+    </p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; max-width: 900px; margin: 0 auto 50px auto; background: #1e2229; padding: 30px; border-radius: 12px; border-left: 5px solid #ff4757; gap: 30px; align-items: center; text-align: left;">
+    <div style="flex: 1; min-width: 200px; text-align: center;">
+        <img src="{{ url_for('static', filename='uploads/coach.webp') }}" alt="Coach" class="site-logo" style="max-height: 120px;">
+    </div>
+    <div style="flex: 2; min-width: 280px;">
+        <h2 style="color: #ff4757; margin-top: 0; text-transform: uppercase; font-size: 24px; letter-spacing: 1px;">{{ t['coach_name_title'] }}</h2>
+        <p style="color: #f1f2f6; line-height: 1.6; font-size: 15px; margin-bottom: 0;">
+            {{ t['coach_bio'] | safe }}
+        </p>
+    </div>
+</div>
+
+<div style="max-width: 800px; margin: 0 auto 50px auto; text-align: center;">
+    <h2 style="text-transform: uppercase; font-size: 26px;">{{ t['coach_method_title'] }}</h2>
+    <p style="color: #f1f2f6; line-height: 1.8; font-size: 16px;">
+        {{ t['coach_method_desc'] }}
+    </p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 30px;">
+    
+    <div class="form-box" style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <h3 style="color: #a4b0be; text-transform: uppercase; margin-top: 0;">{{ t['pack_basic'] }}</h3>
+            <div style="font-size: 36px; font-weight: bold; margin: 20px 0; color: #ffffff;">29€ <span style="font-size: 16px; color: #a4b0be;">{{ t['pack_month'] }}</span></div>
+            <hr style="border: 0; height: 1px; background: #2f3542; margin-bottom: 20px;">
+            <ul style="list-style: none; padding: 0; text-align: left; color: #f1f2f6; line-height: 2;">
+                <li>✔️ {{ t['pack_f1'] }}</li>
+                <li>✔️ {{ t['pack_f2'] }}</li>
+                <li>✔️ {{ t['pack_f3_mail'] }}</li>
+                <li style="color: #ff4757; text-decoration: line-through;">❌ {{ t['pack_f_cal_no'] }}</li>
+                <li style="color: #ff4757; text-decoration: line-through;">❌ {{ t['pack_f_vid_no'] }}</li>
+            </ul>
+        </div>
+        <form action="{{ url_for('coaching') }}" method="POST" style="margin-top: 30px;">
+            <input type="hidden" name="pack_name" value="Pack Basic">
+            <button type="submit" class="btn-track" style="border: none; width: 100%; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase;">{{ t['btn_start'] }}</button>
+        </form>
+    </div>
+
+    <div class="form-box" style="margin: 0; text-align: center; border: 2px solid #ff4757; position: relative; display: flex; flex-direction: column; justify-content: space-between; background: rgba(40, 40, 40, 0.95);">
+        <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #ff4757; padding: 4px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase;">{{ t['pack_popular'] }}</div>
+        <div>
+            <h3 style="color: #ff4757; text-transform: uppercase; margin-top: 0;">{{ t['pack_pro'] }}</h3>
+            <div style="font-size: 36px; font-weight: bold; margin: 20px 0; color: #ffffff;">49€ <span style="font-size: 16px; color: #a4b0be;">{{ t['pack_month'] }}</span></div>
+            <hr style="border: 0; height: 1px; background: #2f3542; margin-bottom: 20px;">
+            <ul style="list-style: none; padding: 0; text-align: left; color: #f1f2f6; line-height: 2;">
+                <li>✔️ {{ t['pack_f1'] }}</li>
+                <li>✔️ {{ t['pack_f2'] }}</li>
+                <li>✔️ <strong style="color: #ff4757;">{{ t['pack_f_cal_yes'] }}</strong></li>
+                <li>✔️ {{ t['pack_f3_prio'] }}</li>
+                <li style="color: #ff4757; text-decoration: line-through;">❌ {{ t['pack_f_vid_no'] }}</li>
+            </ul>
+        </div>
+        <form action="{{ url_for('coaching') }}" method="POST" style="margin-top: 30px;">
+            <input type="hidden" name="pack_name" value="Pack Pro">
+            <button type="submit" style="background-color: #ff4757; color: white; border: none; width: 100%; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 25px; transition: background 0.3s ease;">{{ t['btn_start'] }}</button>
+        </form>
+    </div>
+
+    <div class="form-box" style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #2ed573;">
+        <div>
+            <h3 style="color: #2ed573; text-transform: uppercase; margin-top: 0;">{{ t['pack_prem'] }}</h3>
+            <div style="font-size: 36px; font-weight: bold; margin: 20px 0; color: #ffffff;">79€ <span style="font-size: 16px; color: #a4b0be;">{{ t['pack_month'] }}</span></div>
+            <hr style="border: 0; height: 1px; background: #2f3542; margin-bottom: 20px;">
+            <ul style="list-style: none; padding: 0; text-align: left; color: #f1f2f6; line-height: 2;">
+                <li>✔️ {{ t['pack_f1'] }}</li>
+                <li>✔️ <strong style="color: #ff4757;">{{ t['pack_f_cal_yes'] }}</strong></li>
+                <li>✔️ <strong style="color: #2ed573;">{{ t['pack_f_wa_yes'] }}</strong></li>
+                <li>✔️ <strong style="color: #2ed573;">{{ t['pack_f_vid_yes'] }}</strong></li>
+                <li>✔️ {{ t['pack_f_adj'] }}</li>
+            </ul>
+        </div>
+        <form action="{{ url_for('coaching') }}" method="POST" style="margin-top: 30px;">
+            <input type="hidden" name="pack_name" value="Pack Premium">
+            <button type="submit" style="background-color: #2ed573; color: #1e2229; border: none; width: 100%; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 25px; transition: background 0.3s ease;">{{ t['btn_start'] }}</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

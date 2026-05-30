@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background-image: linear-gradient(rgba(18, 22, 29, 0.9), rgba(18, 22, 29, 0.9)), url('{{ url_for('static', filename='uploads/old2.webp') }}'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 60vh; padding: 30px 10px; margin: -20px;">
+    <div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+        
+        <h1 style="text-align: center; color: #ff4757; text-transform: uppercase; letter-spacing: 2px; margin-top: 0;">
+            {{ t['tr_title'] }}
+        </h1>
+        <h2 style="text-align: center; margin-bottom: 40px; color: #f1f2f6;">
+            {{ t['tr_welcome'] }} {{ user.nom }} ! ⚡
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            
+            <div class="form-box" style="padding: 25px; margin: 0; background: rgba(30, 34, 41, 0.85); backdrop-filter: blur(5px);">
+                <h3 style="color: #ff4757; border-bottom: 1px solid #2f3542; padding-bottom: 10px; margin-top: 0;">
+                    {{ t['tr_profile'] }}
+                </h3>
+                
+                {% if user.image_file %}
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <img src="{{ url_for('static', filename='uploads/' + user.image_file) }}" alt="Photo de profil" style="width: 100%; max-width: 200px; border-radius: 8px; border: 2px solid #2f3542;">
+                    </div>
+                {% endif %}
+                
+                <div style="background-color: rgba(255, 71, 87, 0.1); border-left: 4px solid #ff4757; padding: 10px; margin-bottom: 20px;">
+                    <strong style="color: #a4b0be;">{{ t['tr_sub'] }}</strong><br>
+                    <span style="color: #ffffff; font-weight: bold; font-size: 16px;">{{ user.pack_actuel }}</span>
+                </div>
+
+                <p><strong>{{ t['tr_w'] }}</strong> <span style="color: #2ed573; font-size: 18px; font-weight: bold;">{{ user.poids }} kg</span></p>
+                <p><strong>{{ t['tr_h'] }}</strong> <span style="color: #a4b0be;">{{ user.taille }} cm</span></p>
+                <p><strong>{{ t['tr_a'] }}</strong> <span style="color: #a4b0be;">{{ user.age }} {{ t['tr_y'] }}</span></p>
+                
+                <div style="margin-top: 20px; background: #121212; padding: 15px; border-radius: 8px;">
+                    <strong>{{ t['tr_obj'] }}</strong><br>
+                    <span style="color: #a4b0be; font-size: 14px; line-height: 1.5;">{{ user.description }}</span>
+                </div>
+            </div>
+
+            <div class="form-box" style="padding: 25px; margin: 0; background: rgba(30, 34, 41, 0.85); backdrop-filter: blur(5px);">
+                <h3 style="color: #ff4757; border-bottom: 1px solid #2f3542; padding-bottom: 10px; margin-top: 0;">
+                    {{ t['tr_track_title'] }}
+                </h3>
+
+                {% if user.pack_actuel == 'Pack Pro' or user.pack_actuel == 'Pack Premium' %}
+                    <div style="background: #121212; padding: 25px; border-radius: 8px; margin-top: 20px; border: 1px solid #2f3542;">
+                        <h4 style="margin-top: 0; color: #f1f2f6;">{{ t['tr_cal_goal'] }}</h4>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px;">
+                            <span>{{ t['tr_cal_cons'] }} <strong style="color: #ff4757;">{{ user.calories_consommees }} kcal</strong></span>
+                            <span style="color: #a4b0be;">{{ t['tr_cal_obj'] }} {{ user.objectif_calories }} kcal</span>
+                        </div>
+                        
+                        {% set pourcentage = (user.calories_consommees / user.objectif_calories * 100) | round %}
+                        {% if pourcentage > 100 %}{% set pourcentage = 100 %}{% endif %}
+                        
+                        <div style="width: 100%; background-color: #2f3542; border-radius: 20px; height: 25px; overflow: hidden; position: relative;">
+                            <div style="width: {{ pourcentage }}%; background-color: #ff4757; height: 100%; border-radius: 20px; transition: width 0.5s ease;"></div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div style="background: #121212; padding: 25px; border-radius: 8px; margin-top: 20px; border: 2px dashed #ff4757; text-align: center;">
+                        <span style="font-size: 35px;">🔒</span>
+                        <h4 style="margin-top: 10px; color: #ff4757; font-weight: bold;">{{ t['tr_cal_lock_title'] }}</h4>
+                        <p style="color: #a4b0be; font-size: 14px; margin: 5px 0 15px 0;">
+                            {{ t['tr_cal_lock_desc'] }}
+                        </p>
+                        <a href="{{ url_for('coaching') }}" style="display: inline-block; background-color: #ffa502; color: #1e2229; padding: 6px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px;">
+                            {{ t['tr_upgrade'] }}
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    
+                    {% if user.pack_actuel == 'Pack Pro' or user.pack_actuel == 'Pack Premium' %}
+                        <form action="{{ url_for('ajouter_calories') }}" method="POST" style="background: #121212; padding: 15px; border-radius: 8px; border: 1px solid #2f3542;">
+                            <label style="font-size: 14px; color: #a4b0be;">{{ t['tr_meal_cal'] }}</label><br>
+                            <input type="number" name="calories" required placeholder="Ex: 450" style="width: 100%; padding: 8px; margin: 10px 0; border-radius: 4px; border: none;">
+                            <button type="submit" class="btn-track" style="border: none; width: 100%; cursor: pointer; padding: 10px; font-weight: bold; text-transform: uppercase;">
+                                {{ t['tr_add_meal'] }}
+                            </button>
+                        </form>
+                    {% else %}
+                        <div style="background: rgba(20, 20, 20, 0.4); padding: 15px; border-radius: 8px; border: 1px solid #2f3542; display: flex; align-items: center; justify-content: center; text-align: center; color: #a4b0be; font-size: 13px; font-style: italic;">
+                            <span>{{ t['tr_lock_opt'] }}</span>
+                        </div>
+                    {% endif %}
+
+                    <form action="{{ url_for('maj_poids') }}" method="POST" style="background: #121212; padding: 15px; border-radius: 8px; border: 1px solid #2f3542;">
+                        <label style="font-size: 14px; color: #a4b0be;">{{ t['tr_new_w'] }}</label><br>
+                        <input type="number" step="0.1" name="poids" required placeholder="Ex: 75.5" style="width: 100%; padding: 8px; margin: 10px 0; border-radius: 4px; border: none;">
+                        <button type="submit" style="background-color: #2ed573; color: #1e2229; border: none; border-radius: 25px; width: 100%; cursor: pointer; padding: 10px; font-weight: bold; text-transform: uppercase; transition: background 0.3s ease;">
+                            {{ t['tr_upd_w'] }}
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        {% if user.pack_actuel and user.pack_actuel != 'Aucun pack actif' %}
+        <div style="margin-top: 40px; border-top: 2px solid #2f3542; padding-top: 30px;">
+            <h2 style="text-align: center; color: #ffa502; text-transform: uppercase; letter-spacing: 1px;">{{ t['tr_coach_space'] }} {{ user.pack_actuel }} ⚡</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px;">
+                
+                <div class="form-box" style="margin: 0; padding: 25px; background: rgba(30, 34, 41, 0.9); border-left: 4px solid #ffa502;">
+                    <h3 style="color: #ffa502; margin-top: 0; border-bottom: 1px solid #2f3542; padding-bottom: 10px;">
+                        {{ t['tr_prog_title'] }}
+                    </h3>
+                    
+                    <p style="color: #f1f2f6; white-space: pre-line; line-height: 1.6; font-size: 15px;">
+                        {{ user.programme_coach }}
+                    </p>
+
+                    <div style="margin-top: 30px; text-align: center; border-top: 1px solid #2f3542; padding-top: 20px;">
+                        {% if user.pack_actuel == 'Pack Premium' %}
+                            <p style="color: #2ed573; font-weight: bold; font-size: 14px; margin-bottom: 10px;">{{ t['tr_vip_sup'] }}</p>
+                            <a href="https://wa.me/213555555555?text=Bonjour%20Coach%20Samy%20!%20Je%20suis%20membre%20Premium.%20J'aurais%20besoin%20d'un%20conseil..." 
+                               target="_blank"
+                               style="display: inline-block; background-color: #2ed573; color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);">
+                                {{ t['tr_wa_btn'] }}
+                            </a>
+                        {% else %}
+                            <p style="color: #a4b0be; font-size: 14px; margin-bottom: 10px;">{{ t['tr_email_q'] }}</p>
+                            <a href="mailto:samyoudachene@gmail.com?subject=Question Plan {{ user.pack_actuel }} - {{ user.nom }}" 
+                               style="display: inline-block; background-color: #ff4757; color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; font-weight: bold; text-transform: uppercase;">
+                                {{ t['tr_email_btn'] }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    
+                    <div class="form-box" style="margin: 0; padding: 25px; background: rgba(30, 34, 41, 0.9); flex-grow: 1;">
+                        <h3 style="color: #2ed573; margin-top: 0; border-bottom: 1px solid #2f3542; padding-bottom: 10px;">
+                            {{ t['tr_graph_title'] }}
+                        </h3>
+                        <canvas id="progressChart"></canvas>
+                    </div>
+
+                    {% if user.pack_actuel == 'Pack Premium' %}
+                        <div class="form-box" style="margin: 0; padding: 20px; background: rgba(30, 34, 41, 0.9); border: 1px solid #2ed573;">
+                            <h3 style="color: #2ed573; margin-top: 0; font-size: 16px;">{{ t['tr_vid_title'] }}</h3>
+                            <p style="color: #a4b0be; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">
+                                {{ t['tr_vid_desc'] }}
+                            </p>
+                            
+                            <form action="#" method="POST" enctype="multipart/form-data" style="display: flex; gap: 10px;">
+                                <input type="file" name="video_posture" accept="video/*" required style="font-size: 12px; color: #a4b0be; background: #1e2229; padding: 6px; border-radius: 5px; flex-grow: 1;">
+                                <button type="button" onclick="alert('Félicitations ! Vidéo envoyée avec succès.')" style="background: #2ed573; color: white; border: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 12px; text-transform: uppercase;">
+                                    {{ t['tr_send'] }}
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        const historiquePoids = [{{ user.historique_poids }}];
+        const labels = historiquePoids.map((_, index) => 'Suivi ' + (index + 1));
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Poids (kg)',
+                    data: historiquePoids,
+                    borderColor: '#2ed573',
+                    backgroundColor: 'rgba(46, 213, 115, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#2ed573',
+                    pointRadius: 5,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#f1f2f6' } } },
+                scales: {
+                    x: { ticks: { color: '#a4b0be' }, grid: { color: '#2f3542' } },
+                    y: { ticks: { color: '#a4b0be' }, grid: { color: '#2f3542' } }
+                }
+            }
+        });
+        </script>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

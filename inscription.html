@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ url_for('static', filename='uploads/dumbell.jpg') }}'); background-size: cover; background-position: center; padding: 40px 20px; min-height: 90vh; display: flex; align-items: center; justify-content: center;">
+    <div style="max-width: 600px; width: 100%; background-color: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #333;">
+        <h2 style="margin-top: 0; color: #28a745; text-align: center; text-transform: uppercase;">{{ t['form_ins_title'] }}</h2>
+        
+        <form action="{{ url_for('inscription') }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="pack_hidden" value="{{ request.args.get('pack', 'Non spécifié') }}">
+            
+            <label style="font-weight: bold;">{{ t['form_name'] }}</label><br>
+            <input type="text" name="nom" required style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"><br>
+
+            <label style="font-weight: bold;">{{ t['form_email'] }}</label><br>
+            <input type="email" name="email" required style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"><br>
+            
+            <label style="font-weight: bold;">{{ t['form_pwd'] }}</label><br>
+            <input type="password" name="password" required style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"><br>
+            
+            <label style="font-weight: bold;">{{ t['form_phone'] }}</label><br>
+            <input type="text" name="numero" required style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"><br>
+
+            <label style="font-weight: bold;">{{ t['form_gender'] }}</label><br>
+            <select name="genre" style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="Homme">{{ t['form_g_m'] }}</option>
+                <option value="Femme">{{ t['form_g_f'] }}</option>
+                <option value="Autre">{{ t['form_g_o'] }}</option>
+            </select><br>
+
+            <label style="font-weight: bold;">{{ t['form_weight'] }}</label><br>
+            <input type="number" step="0.1" name="poids" required style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"><br>
+
+            <label style="font-weight: bold;">{{ t['form_height'] }}</label><br>
+            <input type="number" name="taille" required style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"><br>
+
+            <label style="font-weight: bold;">{{ t['form_age'] }}</label><br>
+            <input type="number" name="age" required style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"><br>
+
+            <label style="font-weight: bold;">{{ t['form_img'] }}</label><br>
+            <input type="file" name="image" accept="image/*" style="width: 100%; margin-bottom: 10px;"><br>
+
+            <label style="font-weight: bold;">{{ t['form_desc'] }}</label><br>
+            <textarea name="description" rows="4" style="width: 100%; padding: 6px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;"></textarea><br>
+
+            <button type="submit" style="width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase;">{{ t['btn_validate'] }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

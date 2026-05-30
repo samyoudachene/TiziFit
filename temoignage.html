@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto; padding: 40px 20px;">
+    <h1 style="text-align: center; color: #ff4757; text-transform: uppercase;">Vos Transformations</h1>
+    <p style="text-align: center; color: #a4b0be; margin-bottom: 40px;">Ils ont fait confiance à nos programmes. Voici leurs résultats.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+        
+        <div style="background: #1e2229; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 3px solid #2ed573;">
+            <div style="height: 200px; border-radius: 5px; margin-bottom: 15px; background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('{{ url_for('static', filename='uploads/trans.jfif') }}'); background-size: cover; background-position: center;">
+            </div>
+            <h3 style="color: #f1f2f6;">Karim, 28 ans</h3>
+            <p style="color: #2ed573; font-weight: bold;">- 12 kg en 3 mois</p>
+            <p style="color: #a4b0be; font-style: italic;">"Le suivi sur le tableau de bord et les programmes de Samy ont tout changé. Je me sens dans la meilleure forme de ma vie."</p>
+        </div>
+
+        <div style="background: #1e2229; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 3px solid #2ed573;">
+            <div style="height: 200px; border-radius: 5px; margin-bottom: 15px; background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('{{ url_for('static', filename='uploads/old.jpg') }}'); background-size: cover; background-position: center;">
+            </div>
+            <h3 style="color: #f1f2f6;">Amine, 24 ans</h3>
+            <p style="color: #2ed573; font-weight: bold;">- 8 kg en 2 mois</p>
+            <p style="color: #a4b0be; font-style: italic;">"Les entraînements sont intenses mais les résultats sont là. Le site rend le suivi ultra simple."</p>
+        </div>
+
+        <div style="background: #1e2229; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 3px solid #2ed573;">
+            <div style="height: 200px; border-radius: 5px; margin-bottom: 15px; background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('{{ url_for('static', filename='uploads/1000138033.jpg') }}'); background-size: cover; background-position: center;">
+            </div>
+            <h3 style="color: #f1f2f6;">Sofiane, 30 ans</h3>
+            <p style="color: #2ed573; font-weight: bold;">- 15 kg en 4 mois</p>
+            <p style="color: #a4b0be; font-style: italic;">"Je recommande à 100%. Samy est super à l'écoute et adapte tout à notre rythme."</p>
+        </div>
+
+        <div style="background: #1e2229; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 3px solid #ffa502;">
+            <div style="height: 200px; border-radius: 5px; margin-bottom: 15px; background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('{{ url_for('static', filename='uploads/tr.jfif') }}'); background-size: cover; background-position: center;">
+            </div>
+            <h3 style="color: #f1f2f6;">Sarah, 32 ans</h3>
+            <p style="color: #ffa502; font-weight: bold;">Prise de masse musculaire</p>
+            <p style="color: #a4b0be; font-style: italic;">"Grâce au calcul des calories intégré, j'ai enfin réussi à manger suffisamment pour construire du muscle !"</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

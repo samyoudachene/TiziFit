@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TiziFit - Coaching & Bien-être</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .site-logo {
+            max-height: 120px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        .site-logo:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="nav-logo">
+            <img src="{{ url_for('static', filename='uploads/logo.png') }}" alt="Logo TiziFit" class="site-logo">
+        </a>
+        
+        <div class="nav-links" style="display: flex; align-items: center;">
+            <a href="{{ url_for('home') }}">{{ t['menu_home'] }}</a>
+            <a href="{{ url_for('coaching') }}">{{ t['menu_coaching'] }}</a>
+            <a href="{{ url_for('trouver_salles') }}">{{ t['menu_salles'] }}</a>
+            <a href="{{ url_for('about') }}">{{ t['menu_about'] }}</a>
+            <a href="{{ url_for('temoignage') }}">{{ t['menu_temoignages'] }}</a>
+            
+            {% if 'user_id' in session %}
+                <a href="{{ url_for('track') }}" class="btn-track">{{ t['menu_espace'] }}</a>
+                <a href="{{ url_for('logout') }}">{{ t['menu_logout'] }}</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">{{ t['menu_login'] }}</a>
+                <a href="{{ url_for('inscription') }}" class="btn-signup">{{ t['menu_signup'] }}</a>
+            {% endif %}
+
+            <div style="margin-left: 20px; padding-left: 20px; border-left: 2px solid #2f3542; display: flex; gap: 10px;">
+                <a href="{{ url_for('set_lang', lang='fr') }}" style="color: {% if current_lang == 'fr' %}#ff4757{% else %}#a4b0be{% endif %}; font-weight: bold; text-decoration: none;">FR</a>
+                <span style="color: #2f3542;">|</span>
+                <a href="{{ url_for('set_lang', lang='tam') }}" style="color: {% if current_lang == 'tam' %}#ff4757{% else %}#a4b0be{% endif %}; font-weight: bold; text-decoration: none;">TAM</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">
+                  {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

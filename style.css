@@ -1,0 +1,96 @@
+/* ==========================================
+   STYLE GLOBAL & IMAGE DE FOND
+   ========================================== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background-color: #121212; 
+    color: #ffffff;
+       
+     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/static/uploads/fit.jpg'); 
+     background-size: cover; 
+    background-position: center; 
+    background-attachment: fixed; 
+}
+
+/* ==========================================
+   BARRE DE NAVIGATION (NAVBAR)
+   ========================================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(26, 26, 26, 0.95);
+    padding: 15px 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid #ff4757;
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: 900;
+    color: #ff4757;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ff4757;
+}
+
+/* Boutons d'action dans le menu */
+.btn-signup, .btn-track {
+    background-color: #ff4757;
+    padding: 8px 18px;
+    border-radius: 25px;
+    color: white !important;
+    transition: background 0.3s ease !important;
+}
+
+.btn-signup:hover, .btn-track:hover {
+    background-color: #ff6b81;
+}
+
+/* ==========================================
+   CONTENEURS & FORMULAIRES
+   ========================================== */
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+/* Cartes transparentes pour les formulaires (Login / Inscription / Track) */
+.form-box {
+    max-width: 500px;
+    margin: 0 auto;
+    background: rgba(30, 30, 30, 0.85);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #2f3542;
+    backdrop-filter: blur(10px); /* Effet de flou moderne en arrière-plan */
+}
+
+/* Messages Flash d'alerte */
+.flash {
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+.flash.success { background-color: #2ed573; color: #1e2229; }
+.flash.danger { background-color: #ff4757; color: white; }
+.flash.warning { background-color: #ffa502; color: #1e2229; }

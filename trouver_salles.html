@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto; padding: 40px 20px;">
+    <h1 style="text-align: center; color: #ff4757; text-transform: uppercase;">{{ t['gym_title'] }}</h1>
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <input type="text" id="searchBar" onkeyup="filterGyms()" placeholder="{{ t['gym_search'] }}" style="width: 100%; max-width: 500px; padding: 15px; border-radius: 25px; border: none; font-size: 16px; outline: none; background: #f1f2f6;">
+    </div>
+
+    <div id="gymList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        
+        <div class="gym-card" data-ville="paris" data-prix="30" style="background: #1e2229; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #f1f2f6; margin-top: 0;">Fitness Park - Paris</h3>
+            <p style="color: #a4b0be;">📍 Paris 11ème</p>
+            <p style="color: #2ed573; font-weight: bold;">💰 30€ {{ t['gym_month'] }}</p>
+            <p style="color: #a4b0be; font-size: 14px;">Machines guidées, espace poids libres, cours collectifs.</p>
+        </div>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Olympique+Sebaou+Gym+Tala+Athmane" target="_blank" style="text-decoration: none; color: inherit;">
+            <div class="gym-card" data-ville="tizi ouzou" data-prix="25" style="background: #1e2229; padding: 20px; border-radius: 10px; border-left: 4px solid #ff4757; transition: transform 0.3s; cursor: pointer;">
+                <h3 style="color: #f1f2f6; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
+                    Olympique Sebaou Gym 🏋️‍♂️
+                    <span style="font-size: 12px; background: #ff4757; color: white; padding: 3px 8px; border-radius: 10px;">{{ t['gym_test'] }}</span>
+                </h3>
+                <p style="color: #a4b0be; margin: 5px 0;">📍 Tala Athmane, Tizi Ouzou</p>
+                <p style="color: #2ed573; font-weight: bold; margin: 5px 0;">💰 Prix local / Ambiance Passionnés</p>
+                <p style="color: #a4b0be; font-size: 14px; line-height: 1.4;">Grand espace de musculation, équipements complets de force et cardio, et une communauté très motivante.</p>
+                
+                <div style="color: #ff4757; font-size: 13px; margin-top: 15px; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                    {{ t['gym_map_btn'] }}
+                </div>
+            </div>
+        </a>
+
+        <a href="https://maps.app.goo.gl/eUeMD4grLt3STzXi7" target="_blank" style="text-decoration: none; color: inherit;">
+            <div class="gym-card" data-ville="tizi ouzou" data-prix="25" style="background: #1e2229; padding: 20px; border-radius: 10px; border-left: 4px solid #ff4757; transition: transform 0.3s; cursor: pointer;">
+                <h3 style="color: #f1f2f6; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
+                    Zone Fit
+                    <span style="font-size: 12px; background: #ff4757; color: white; padding: 3px 8px; border-radius: 10px;">{{ t['gym_test'] }}</span>
+                </h3>
+                <p style="color: #a4b0be; margin: 5px 0;">📍 Tizi Ouzou</p>
+                <p style="color: #2ed573; font-weight: bold; margin: 5px 0;">💰 Prix local / Ambiance Passionnés</p>
+                <p style="color: #a4b0be; font-size: 14px; line-height: 1.4;">Grand espace de musculation, équipements complets de force et cardio, et une communauté très motivante.</p>
+                
+                <div style="color: #ff4757; font-size: 13px; margin-top: 15px; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                    {{ t['gym_map_btn'] }}
+                </div>
+            </div>
+        </a>
+        
+        <div class="gym-card" data-ville="marseille" data-prix="60" style="background: #1e2229; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #f1f2f6; margin-top: 0;">L'Arène - Marseille</h3>
+            <p style="color: #a4b0be;">📍 Marseille Vieux-Port</p>
+            <p style="color: #2ed573; font-weight: bold;">💰 60€ {{ t['gym_month'] }}</p>
+            <p style="color: #a4b0be; font-size: 14px;">Coaching privé, sauna, crossfit.</p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function filterGyms() {
+        let input = document.getElementById('searchBar').value.toLowerCase();
+        let gymCards = document.getElementsByClassName('gym-card');
+
+        for (let i = 0; i < gymCards.length; i++) {
+            let ville = gymCards[i].getAttribute('data-ville');
+            let prix = gymCards[i].getAttribute('data-prix');
+            let texte = gymCards[i].innerText.toLowerCase();
+            
+            if (texte.includes(input) || (parseInt(input) >= parseInt(prix))) {
+                gymCards[i].style.display = "";
+            } else {
+                gymCards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+{% endblock %}
