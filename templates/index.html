@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="text-align: center; padding: 60px 20px; max-width: 800px; margin: 0 auto;">
+    
+    <h1 style="font-size: 48px; font-weight: 800; text-transform: uppercase; margin-bottom: 20px;">
+        {{ t['idx_title_1'] }} <span style="color: #ff4757;">{{ t['idx_title_2'] }}</span>
+    </h1>
+    
+    <h2 style="color: #a4b0be; font-weight: 400; margin-bottom: 40px;">{{ t['idx_subtitle'] }}</h2>
+    <p style="font-size: 18px; line-height: 1.8; color: #f1f2f6; margin-bottom: 50px;">
+        {{ t['idx_desc'] }}
+    </p>
+
+    <hr style="border: 0; height: 1px; background: #2f3542; margin-bottom: 50px;">
+
+    <h2 style="font-size: 32px; text-transform: uppercase; margin-bottom: 30px;">{{ t['idx_why'] }}</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; text-align: left;">
+        <div style="background: #1e1e1e; padding: 20px; border-radius: 8px; border-left: 4px solid #ff4757;">
+            <h4 style="margin: 0 0 10px 0; font-size: 18px;">{{ t['idx_box1_title'] }}</h4>
+            <p style="margin: 0; color: #a4b0be; font-size: 14px;">{{ t['idx_box1_desc'] }}</p>
+        </div>
+        <div style="background: #1e1e1e; padding: 20px; border-radius: 8px; border-left: 4px solid #ff4757;">
+            <h4 style="margin: 0 0 10px 0; font-size: 18px;">{{ t['idx_box2_title'] }}</h4>
+            <p style="margin: 0; color: #a4b0be; font-size: 14px;">{{ t['idx_box2_desc'] }}</p>
+        </div>
+        <div style="background: #1e1e1e; padding: 20px; border-radius: 8px; border-left: 4px solid #ff4757;">
+            <h4 style="margin: 0 0 10px 0; font-size: 18px;">{{ t['idx_box3_title'] }}</h4>
+            <p style="margin: 0; color: #a4b0be; font-size: 14px;">{{ t['idx_box3_desc'] }}</p>
+        </div>
+        <div style="background: #1e1e1e; padding: 20px; border-radius: 8px; border-left: 4px solid #ff4757;">
+            <h4 style="margin: 0 0 10px 0; font-size: 18px;">{{ t['idx_box4_title'] }}</h4>
+            <p style="margin: 0; color: #a4b0be; font-size: 14px;">{{ t['idx_box4_desc'] }}</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
