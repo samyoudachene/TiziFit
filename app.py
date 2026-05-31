@@ -24,8 +24,8 @@ app.config['MAIL_USE_SSL'] = False
 # On cherche le nom de la variable 'MAIL_USERNAME' définie sur Render
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 # On cherche le nom de la variable 'MAIL_PASSWORD' définie sur Render
-app.config['MAIL_PASSWORD'] = os.environ.get('rhgurvfrfdntncag')
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('samyoudachene@gmail.com')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 
 db = SQLAlchemy(app)
 mail = Mail(app)
