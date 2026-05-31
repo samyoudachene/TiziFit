@@ -4,7 +4,11 @@ from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from dotenv import load_dotenv # NOUVEAU : Importation de dotenv
 from translations import TRANSLATIONS
+
+# NOUVEAU : Charge les variables d'un fichier .env si on est en local
+load_dotenv() 
 
 app = Flask(__name__)
 app.secret_key = "super_secret_key" # Utilisé pour sécuriser les sessions
@@ -16,14 +20,12 @@ UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Config Mail CORRIGÉE
+# Config Mail 
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
 app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-# On cherche le nom de la variable 'MAIL_USERNAME' définie sur Render
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-# On cherche le nom de la variable 'MAIL_PASSWORD' définie sur Render
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 
