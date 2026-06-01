@@ -10,9 +10,9 @@
     <div id="gymList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
         
         <div class="gym-card" data-ville="paris" data-prix="30" style="background: #1e2229; padding: 20px; border-radius: 10px;">
-            <h3 style="color: #f1f2f6; margin-top: 0;">Fitness Park - Paris</h3>
-            <p style="color: #a4b0be;">📍 Paris 11ème</p>
-            <p style="color: #2ed573; font-weight: bold;">💰 30€ {{ t['gym_month'] }}</p>
+            <h3 style="color: #f1f2f6; margin-top: 0;">Fitness Park - Tamda</h3>
+            <p style="color: #a4b0be;">📍 Tamda</p>
+            <p style="color: #2ed573; font-weight: bold;">💰 1500DA {{ t['gym_month'] }}</p>
             <p style="color: #a4b0be; font-size: 14px;">Machines guidées, espace poids libres, cours collectifs.</p>
         </div>
 
@@ -49,10 +49,39 @@
         </a>
         
         <div class="gym-card" data-ville="marseille" data-prix="60" style="background: #1e2229; padding: 20px; border-radius: 10px;">
-            <h3 style="color: #f1f2f6; margin-top: 0;">L'Arène - Marseille</h3>
-            <p style="color: #a4b0be;">📍 Marseille Vieux-Port</p>
-            <p style="color: #2ed573; font-weight: bold;">💰 60€ {{ t['gym_month'] }}</p>
+            <h3 style="color: #f1f2f6; margin-top: 0;">GYMshark</h3>
+            <p style="color: #a4b0be;">📍 Alger</p>
+            <p style="color: #2ed573; font-weight: bold;">💰 2000DA {{ t['gym_month'] }}</p>
             <p style="color: #a4b0be; font-size: 14px;">Coaching privé, sauna, crossfit.</p>
+        </div>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Olympique+Sebaou+Gym+Tala+Athmane" target="_blank" style="text-decoration: none; color: inherit;">
+            <div class="gym-card" data-ville="tizi ouzou" data-prix="25" style="background: #1e2229; padding: 20px; border-radius: 10px; border-left: 4px solid #ff4757; transition: transform 0.3s; cursor: pointer;">
+                <h3 style="color: #f1f2f6; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
+                    Golden Body 🏋️‍♂️
+                    <span style="font-size: 12px; background: #ff4757; color: white; padding: 3px 8px; border-radius: 10px;">{{ t['gym_test'] }}</span>
+                </h3>
+                <p style="color: #a4b0be; margin: 5px 0;">📍 Tigzirt, Tizi Ouzou</p>
+                <p style="color: #2ed573; font-weight: bold; margin: 5px 0;">💰 Prix local </p>
+                <p style="color: #a4b0be; font-size: 14px; line-height: 1.4;">Grand espace de musculation, équipements complets de force et cardio, et une communauté très motivante.</p>
+                
+                <div style="color: #ff4757; font-size: 13px; margin-top: 15px; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                    {{ t['gym_map_btn'] }}
+                </div>
+            </div>
+        </a>
+
+        <div class="gym-card" data-ville="Tizi" data-prix="60" style="background: #1e2229; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #f1f2f6; margin-top: 0;">GYM & Fitness</h3>
+            <p style="color: #a4b0be;">📍 TIZI_GYM</p>
+            <p style="color: #2ed573; font-weight: bold;">💰 1000DA {{ t['gym_month'] }}</p>
+            <p style="color: #a4b0be; font-size: 14px;">Coaching privé, sauna, crossfit.</p>
+        </div>
+        <div class="gym-card" data-ville="marseille" data-prix="60" style="background: #1e2229; padding: 20px; border-radius: 10px;">
+            <h3 style="color: #f1f2f6; margin-top: 0;">Salle de sport</h3>
+            <p style="color: #a4b0be;">📍 Sahel</p>
+            <p style="color: #2ed573; font-weight: bold;">💰 1400DA {{ t['gym_month'] }}</p>
+            <p style="color: #a4b0be; font-size: 14px;">Coaching privé, Men&Women, crossfit.</p>
         </div>
 
     </div>
