@@ -1,60 +1,41 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-
 from flask_sqlalchemy import SQLAlchemy
-
 from flask_mail import Mail, Message
-
 from werkzeug.utils import secure_filename
-
 from werkzeug.security import generate_password_hash, check_password_hash
-
 import os
-
 from translations import TRANSLATIONS
-
-
+from threading import Thread # NOUVEAU : Pour gérer l'envoi en arrière-plan
 
 app = Flask(__name__)
-
-app.secret_key = "super_secret_key" # Utilisé pour sécuriser les sessions
-
-
+app.secret_key = "super_secret_key"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness.db'
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
-
 UPLOAD_FOLDER = 'static/uploads'
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-
-
-# Config Mail CORRIGÉE
-
+# Config Mail
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
-
 app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
-
 app.config['MAIL_USE_TLS'] = True
-
 app.config['MAIL_USE_SSL'] = False
-
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 
-
-
 db = SQLAlchemy(app)
-
 mail = Mail(app)
+
+# NOUVÈLE FONCTION : Envoie le mail en tâche de fond sans bloquer l'utilisateur
+def send_async_email(flask_app, message):
+    with flask_app.app_context():
+        try:
+            mail.send(message)
+        except Exception as e:
+            print(f"Erreur d'envoi d'email en tâche de fond : {e}")
 
 
 
@@ -151,61 +132,31 @@ def home():
 # -- MISE À JOUR DE LA ROUTE COACHING --
 
 @app.route('/coaching', methods=['GET', 'POST'])
-
 def coaching():
-
     if request.method == 'POST':
-
         pack_name = request.form.get('pack_name')
-
         
-
         if 'user_id' in session:
-
             user = UserTracker.query.get(session['user_id'])
-
             
-
             # On enregistre le pack choisi dans la base de données
-
             user.pack_actuel = pack_name
-
             db.session.commit()
-
             
-
-            # Envoi du mail au coach...
-
+            # Préparation du mail au coach
             msg = Message(f"Choix de Formule : {pack_name}",
-
                           sender=app.config['MAIL_DEFAULT_SENDER'],
-
                           recipients=['samyoudachene@gmail.com'])
-
             msg.body = f"Le client connecté {user.nom} a validé la formule : {pack_name}."
-
-            try:
-
-                mail.send(msg)
-
-                flash(f"Félicitations ! Votre abonnement au {pack_name} est activé.", "success")
-
-            except Exception as e:
-
-                print(f"Erreur d'envoi d'email: {e}") # Pour voir l'erreur dans les logs Render
-
-                flash("Votre pack est activé sur votre espace.", "success")
-
             
-
+            # CORRECTION : On lance l'envoi dans un thread séparé (Instantané pour le client)
+            Thread(target=send_async_email, args=(app, msg)).start()
+            
+            flash(f"Félicitations ! Votre abonnement au {pack_name} est activé.", "success")
             return redirect(url_for('track'))
-
         else:
-
             return redirect(url_for('inscription', pack=pack_name))
-
             
-
     return render_template('coaching.html')
 
 
@@ -344,43 +295,24 @@ def inscription():
 
         )
 
+# [ ... Reste de ton code de création d'utilisateur inchangé ... ]
         db.session.add(nouvel_utilisateur)
-
         db.session.commit()
 
-
-
         # Connexion automatique
-
         session['user_id'] = nouvel_utilisateur.id
 
-
-
-        # Envoi du mail au Coach
-
+        # Préparation du mail au Coach
         msg = Message(f"Nouveau Client Inscrit - Pack : {pack_recupere}",
-
                       sender=app.config['MAIL_DEFAULT_SENDER'],
-
                       recipients=['samyoudachene@gmail.com'])
-
         msg.body = f"Nouveau client: {nom}\nPack choisi: {pack_recupere}\nPoids: {poids}kg\nObjectif: {description}"
-
-        try:
-
-            mail.send(msg)
-
-        except Exception as e:
-
-            print(f"Erreur d'envoi d'email: {e}") # Pour voir l'erreur dans les logs Render
-
-
+        
+        # CORRECTION : On délègue l'envoi au thread d'arrière-plan pour éviter le timeout 502
+        Thread(target=send_async_email, args=(app, msg)).start()
 
         flash(f"Inscription réussie ! Bienvenue dans votre espace et merci d'avoir choisi le {pack_recupere}.", "success")
-
         return redirect(url_for('track'))
-
-
 
     return render_template('inscription.html')
 
